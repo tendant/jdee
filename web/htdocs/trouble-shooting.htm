@@ -1,0 +1,727 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content=
+    "text/html; charset=iso-8859-1">
+    <meta name="GENERATOR" content="Microsoft FrontPage 3.0">
+    <title>
+      JDE Troubleshooting Guide
+    </title>
+  </head>
+  <body bgcolor="#FFFFFF">
+    <h1>
+      JDE Troubleshooting Guide
+    </h1>
+    <p>
+      The following describes common problems using the JDE and
+      their solutions.
+    </p>
+    <p>
+      <strong>Problem</strong> When I compile a file, the
+      compilation command is including invalid flags.I am using the
+      latest version of the JDE with JDK 1.1.x.
+    </p>
+    <blockquote>
+      <p>
+        <strong>Solution</strong> The JDE's compile command
+        (selected via <font size="2"><strong>
+        JDE-&gt;Compile</strong></font>) &nbsp; invokes the
+        compiler with command-line arguments that select the
+        compiler options you have chosen via the <font size="2">
+        <strong>JDE-&gt;Options-&gt;Compile</strong></font>
+        command. The command line switches accepted by the JDK 1.2
+        version of javac changed somewhat from those accepted
+        earlier versions. By default, the JDE compile command
+        &nbsp; uses the command-line switches defined by the JDK
+        1.2 version. If you are using earlier versions of javac and
+        you want to use a command-line switch that is no longer
+        supported by JDK 1.2 or has changed, you have two options.
+        In the case of the -depend switch, which changed to
+        -Xdepend in Java 1.2, you can cause the JDE to revert to
+        the earlier form by setting the
+        jde-compile-option-depend-switch. In fact, you need to do
+        this, if you want to use the JDE's Java build command
+        (<strong><font size="2">JDE-&gt;Build</font></strong>). For
+        other switches that have changed, you can specify the
+        earlier form via the jde-compile-option-command-line-arg
+        option.
+      </p>
+    </blockquote>
+    <p>
+      <strong>Problem</strong> I can't get the JDE to use Internet
+      Explorer to display the JDK doc or the JDE User's Guide.
+    </p>
+    <blockquote>
+      <p>
+        <strong>Solution</strong> The JDE uses Emacs browse-url
+        interface to web browsers. browse-url supports Netscape by
+        default. To use Internet Explorer:
+      </p>
+      <ol>
+        <li>
+          Add the following code to your .emacs file
+<pre>
+(if (eq system-type 'windows-nt)
+  (defadvice browse-url-generic (around show-window act)
+    "*Sets `start-process-show-window' on."
+    (let ((w32-start-process-show-window t))
+      ad-do-it)))
+  
+</pre>
+          <p>
+            This code causes Emacs to show the window of the
+            browser launched by the function browse-url-generic.
+          </p>
+        </li>
+        <li>
+          Customize the variable <tt>
+          browse-url-generic-program</tt> to specify iexplore as
+          the "generic" browser on your system. 
+          <p>
+            (To display the custom buffer for browse-url, execute
+          </p>
+<pre>
+M-x customize-group browse-url)
+</pre>
+          <p>
+            After you have done this, the custom buffer should look
+            like
+          </p>
+<pre>
+Browse Url Generic Program [Hide] [Value Menu] String 
+d/applications/ie4/iexplore 
+[State] this option has been set and saved.
+The name of the browser program used by `browse-url-generic'.
+</pre>
+        </li>
+        <li>
+          Customize the variable <tt>
+          browse-url-browser-function</tt> to specify 
+<pre>
+browse-url-generic
+</pre>
+          <p>
+            as the function that invokes the browser when the
+            command <tt>browse-url is</tt> executed.
+          </p>
+          <p>
+            After you have done this, the custom buffer should look
+            like this:
+          </p>
+<pre>
+Browse Url Browser Function [Hide] [Value Menu] browse-url-generic
+Ask the WWW browser defined by `browse-url-generic-program' to load URL. [More]
+[State] this option has been set and saved.
+Function to display the current buffer in a WWW browser. [More]
+</pre>
+        </li>
+        <li>
+          Restart Emacs.
+        </li>
+      </ol>
+    </blockquote>
+    <p>
+      <b>Problem:</b> I've just updated to Emacs 20.3.1 and the
+      latest JDE.&nbsp; I used to set my <tt>CLASSPATH</tt> in my
+      <tt>.emacs</tt> as follows:
+    </p>
+    <blockquote>
+      <p>
+        <tt>(setq jde-global-classpath
+        '("c:/jdk1.1.7/lib/classes.zip" "."))</tt>
+      </p>
+    </blockquote>
+    <blockquote>
+    <p>
+      However, this no longer takes effect, and I seem forced to
+      use customize.
+    </p>
+    <p>
+      Is this a deliberate change in policy?
+    </p>
+    </blockquote>
+    <blockquote>
+      <p>
+        <b>Solution:</b> Yes, you must use custom to customize JDE
+        variables (or at least duplicate its behavior). The reason
+        is that custom on most versions of Emacs does not allow
+        customization of buffer-local variables. This conflicts
+        with the need for the JDE to support project-specific
+        customization of JDE variables. The JDE solves this problem
+        by taking advantage of the fact that custom stores the
+        standard and customized values of a variable as properties
+        of the variable. Whenever you open or switch Java source
+        buffers, the JDE resets the values of each JDE variable
+        according to the following rules:
+      </p>
+      <ul>
+        <li>
+          If a <tt>prj.el</tt> file exists in the directory tree
+          containing the new buffer's source file, the JDE sets the
+          value of the JDE variable to the value stored for that
+          variable in the <tt>prj.el</tt> file. 
+          <p>
+            This rule ensures that variables are set to
+            project-specific values in buffers that are associated
+            with projects.
+          </p>
+        </li>
+        <li>
+          If there is no <tt>prj.el</tt> file and the variable has
+          a <tt>customized-value</tt> property, the JDE sets the
+          value of the JDE variable to the value stored in the <tt>
+          customized-value</tt> property. 
+          <p>
+            Custom creates and sets the <tt>customized-value</tt>
+            property to the value you specify when you customize a
+            variable and select the<b><font size="-1"> Save for
+            future sessions</font></b> option from custom's <b>
+            <font size="-1">State</font></b> menu, which saves the
+            value by default in your <tt>.emacs</tt> file. This
+            rule ensures that variables that you have customized
+            are reset to the customized value saved in your .emacs
+            file, when you switch from a source buffer that is
+            associated with a project to a source buffer that is
+            not associated with a project.
+          </p>
+        </li>
+        <li>
+          If there is no prj.el file and no <tt>
+          customized-value</tt> property, the JDE sets the value of
+          the JDE variable to the value stored in the variable's
+          <tt>standard-value</tt> property. 
+          <p>
+            Custom sets the <tt>standard-value</tt> property of a
+            JDE variable to the value defined by the JDE. This rule
+            ensures that a non-customized variable is set to the
+            standard value when&nbsp; you switch from a buffer that
+            is associated with a project to a buffer that is not
+            associated with a project.
+          </p>
+        </li>
+      </ul>
+      <p>
+        As you can see from the foregoing, the JDE resets the value
+        of each JDE variable whenever you open or switch buffers to
+        either a value stored in a prj.el file or to a value stored
+        as a property of the variable. Thus, any value set by a
+        <tt>setq</tt> statement in your <tt>.emacs</tt> file will
+        be overwritten. So if you want to customize a variable in
+        your <tt>.emacs</tt> file, you have two options:<br>
+      </p>
+      <ul>
+        <li>
+          <p>
+            Open a customization buffer for the variable, edit the
+            standard value, and save the result by selecting the
+            <b><font size="-1">Save for future sessions</font></b>
+            option from custom's <b><font size="-1">
+            State</font></b> menu.
+          </p>
+        </li>
+        <li>
+          <p>
+            Set the value of the variable's customized-value
+            property to the customized value, using a put form in
+            your <tt>.emacs</tt> file, for example,
+          </p>
+          <blockquote>
+            <p>
+              <tt>(put 'jde-compiler 'customized-value
+              "jikes")</tt>
+            </p>
+          </blockquote>
+        </li>
+      </ul>
+      <p>
+        &nbsp;
+      </p>
+    </blockquote>
+    <p>
+      <b>Problem:</b> I am using NT/Emacs 20.3.1 and JDE 2.1.0 and
+      the version of speedbar that comes with JDE 2.1.0.&nbsp; On
+      Emacs startup, I get the error
+    </p>
+    <blockquote>
+      <p>
+        <tt>Error in init file: Symbol's function definition is
+        void:</tt><br>
+         <tt>speedbar-make-specialized-keymap</tt>
+      </p>
+    </blockquote>
+    <blockquote>
+      <p>
+        There is some incompatibility between 20.3.1 and the
+        (out-of-date) version of speedbar included in<br>
+         JDE 2.1.0. The next versions of NT/Emacs and of the JDE
+        will include a compatible version. In the meantime:
+      </p>
+      <p>
+        <b>Solution</b>: Either download the latest version, <a
+        href= 
+        "ftp://www.ultranet.com/pub/zappo/speedbar-0.7.2b.tar.gz">
+        0.7.2b,</a> of speedbar or use the version that comes with
+        20.3.1 after correcting the typo that occurs in that
+        version (see next problem).
+      </p>
+    </blockquote>
+    <p>
+      <b>Problem:</b> I am using NT/Emacs 20.3.1 and JDE 2.1.0 and
+      the version of speedbar that comes with 20.3.1.&nbsp; On
+      Emacs startup, I get the error
+    </p>
+    <blockquote>
+      <p>
+        <tt>Signaling: (void-variable c-frame)</tt>
+      </p>
+    </blockquote>
+    <blockquote>
+      <p>
+        The version of speedbar that comes with NT/Emacs 20.3.1 has
+        a typo that results in a reference to the undefined symbol
+        <tt>c-frame</tt>. You cannot use the version that comes
+        with JDE 2.1.0 (see previous problem). The next versions of
+        NT/Emacs and of the JDE will include a compatible version.
+        In the meantime:
+      </p>
+      <p>
+        <b>Solution</b>: Download the latest version of speedbar
+        from
+      </p>
+      <blockquote>
+        <p>
+          <tt>
+          ftp://www.ultranet.com/pub/zappo/speedbar-0.7.2b.tar.gz</tt>
+        </p>
+      </blockquote>
+      <p>
+        or change the line that reads
+      </p>
+      <blockquote>
+        <p>
+          <tt>(define-key speedbar-key-map "Q" 'delete
+          c-frame)</tt>
+        </p>
+      </blockquote>
+      <p>
+        in the 20.3.1 version of speedbar to
+      </p>
+      <blockquote>
+        <p>
+          <tt>(define-key speedbar-key-map "Q" 'delete-frame)</tt>
+        </p>
+      </blockquote>
+      <p>
+        and recompile <tt>speedbar.el</tt>.
+      </p>
+    </blockquote>
+    <p>
+      <b>Problem:</b> On Emacs startup, Emacs signals some error.
+    </p>
+    <blockquote>
+      <p>
+        This is by far the most common JDE problem reported. It
+        almost alway occurs for one or more of the following
+        reasons:
+      </p>
+      <ul>
+        <li>
+          Failure to install the latest versions of the packages
+          required by the JDE. 
+          <p>
+            Failure to install a package required by the JDE
+            results in the JDE (or one of the packages on which it
+            depends) refering to one or more undefined Lisp symbols
+            during startup. When this happens, Emacs halts the
+            process of loading the JDE (and signals an error if you
+            started Emacs with the -debug-init switch). A result of
+            JDE not being loaded is that the JDE menu does not
+            appear when you open a Java file.<br>
+             &nbsp;
+          </p>
+        </li>
+        <li>
+          Failure to byte-compile the packages required by the JDE.
+          
+          <p>
+            Some packages, in particular, cc-mode, run correctly
+            only when compiled. Although many packages run fine
+            without compiling, it is usually safest to compile.<br>
+             &nbsp;
+          </p>
+        </li>
+        <li>
+          Failure to put the directories containing the latest
+          versions of JDE-required packages ahead of any other Lisp
+          directories in the Emacs load-path 
+          <p>
+            Load-path problems are particularly insidious because
+            their effect is the same as if a package had never been
+            installed. The user knows that he or she has installed
+            all the packages required by the JDE and yet it doesn't
+            work.. Often, the reason is that an older version of a
+            package, particularly custom, still exists in the
+            user's Lisp directory tree and is being loaded ahead of
+            the new version.
+          </p>
+        </li>
+      </ul>
+    </blockquote>
+    <blockquote>
+      <p>
+        <b>Solution:</b> Make sure that you have installed and
+        compiled all the packages required by the JDE and that you
+        have put the packages at the head of your load-path.
+      </p>
+    </blockquote>
+    <p>
+      <b>Problem</b>: On Emacs startup, this message appears:
+    </p>
+    <blockquote>
+      <p>
+        <tt>Error in init file: error: "Lisp nesting exceeds
+        max-lisp-eval-depth"</tt>
+      </p>
+    </blockquote>
+    <blockquote>
+      <p>
+        <b>Solution</b>: Download the latest version of cc-mode
+        (5.20 or greater) and compile all the .el files in the
+        cc-mode distribution. When compiling the cc-mode files,
+        please be sure to follow exactly the compilation
+        instructions given in the readme file that accompanies the
+        cc-mode distribution.
+      </p>
+    </blockquote>
+    <p>
+      <b>Problem</b>: I installed the latest version of cc-mode and
+      now I cannot indent a line by pressing the TAB key. In fact,
+      when I edit a .c or .java file and hit tab, I get:
+    </p>
+    <blockquote>
+      <p>
+        <tt>"Invalid function: (macro . #[(cond &amp;rest body)
+        "\300&nbsp;&nbsp;&nbsp; \302^KBE\207"</tt><br>
+         <tt>[if cond progn body] 4
+        ("c:/mcarland/lisp/cc-mode-5.20/cc-mode-19.elc" .
+        1007)])"</tt>
+      </p>
+    </blockquote>
+    <blockquote>
+      <p>
+        Martin Stjernholm &lt;mast@lysator.liu.se&gt; reports that
+        CC Mode 5.20 doesn't byte compile correctly under Emacs
+        19.34, because the compatibility macros in cc-mode-19.el
+        aren't required prior to compilation. The patch below fixes
+        this. There will be a bugfix release out soon too.
+      </p>
+      <p>
+        <tt>--- cc-make.el&nbsp; 1997/10/03
+        15:13:31&nbsp;&nbsp;&nbsp;&nbsp; 5.12</tt><br>
+         <tt>+++ cc-make.el&nbsp; 1998/02/10
+        22:48:57&nbsp;&nbsp;&nbsp;&nbsp; 5.13</tt><br>
+         <tt>@@ -20,7 +20,15 @@</tt><br>
+         <tt>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        (error nil))</tt><br>
+         <tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ;;
+        Stock Emacs 19.34 doesn't have this</tt><br>
+         <tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        (fboundp 'defcustom))</tt><br>
+         <tt>-&nbsp;&nbsp;&nbsp; (batch-byte-compile)</tt><br>
+         <tt>+&nbsp;&nbsp;&nbsp; (progn</tt><br>
+         <tt>+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (if (or (not (fboundp
+        'functionp))</tt><br>
+         <tt>
+        +&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        (not (fboundp 'char-before))</tt><br>
+         <tt>
+        +&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        (not (c-safe (char-after) t))</tt><br>
+         <tt>
+        +&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        (not (fboundp 'when))</tt><br>
+         <tt>
+        +&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        (not (fboundp 'unless)))</tt><br>
+         <tt>+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; ;;
+        cc-mode-19.el contains macros that should be compiled
+        in.</tt><br>
+         <tt>+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        (require 'cc-mode-19))</tt><br>
+         <tt>+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        (batch-byte-compile))</tt><br>
+         <tt>&nbsp;&nbsp; (error STOP! STOP! STOP! STOP!</tt><br>
+         <tt>&nbsp;</tt><br>
+         <tt>The Custom library was not found or is out of
+        date.&nbsp; A more current</tt>
+      </p>
+    </blockquote>
+    <blockquote>
+      <p>
+        <b>Solution</b>: Martin suggests the easiest way to
+        fix&nbsp; this problem is to use the following command to
+        byte-compile the cc-mode files:
+      </p>
+      <p>
+        <tt>emacs -batch -no-site-file -q -l cc-mode-19.el -l
+        cc-make.el cc-*.el</tt><br>
+         <tt>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        ^^^^^^^^^^^^^^^^</tt><br>
+         <tt>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</tt>
+        add this
+      </p>
+    </blockquote>
+    <p>
+      <b>Problem:</b> On Emacs startup, I get the following
+      message:
+    </p>
+    <blockquote>
+      <p>
+        <tt>Error in initfile: Symbol's value as variable is
+        void:</tt><br>
+         <tt>font-lock-defaults-alist</tt>
+      </p>
+    </blockquote>
+    <blockquote>
+      <p>
+        <b>Solution</b>: Put the following statements
+      </p>
+      <blockquote>
+        <p>
+          <tt>(require 'font-lock)</tt><br>
+           <tt>(require 'jde)</tt>
+        </p>
+      </blockquote>
+      <p>
+        in your .emacs file. The next release of the JDE will
+        require font-lock to avoid this problem.
+      </p>
+    </blockquote>
+    <p>
+      <b>Problem</b>: On startup of XEmacs 20.2, I get the
+      following error message
+    </p>
+    <blockquote>
+<pre>
+Unknown keyword
+speedbar-ignored-path-expressions
+</pre>
+    </blockquote>
+    <blockquote>
+      <p>
+        <b>Solution:</b> Use <tt>load-file</tt> instead of <tt>
+        require</tt> to force loading of the 1.9961 version of
+        custom, e.g., put the following in your .emacs file
+      </p>
+      <blockquote>
+        <p>
+          <tt>;;(require 'custom)</tt><br>
+           <tt>(load-file (expand-file-name
+          "~/custom-1.9961/custom.elc"))</tt>
+        </p>
+      </blockquote>
+    </blockquote>
+    <blockquote>
+      <p>
+        Apparently the version of custom distributed with XEmacs
+        20.2 is broken in some way.
+      </p>
+    </blockquote>
+    <p>
+      <b>Problem</b>: On startup or when compiling jde.el, NT/Emacs
+      19.34.6 signals:
+    </p>
+    <blockquote>
+      <p>
+        <tt>Symbol's value as variable is void ((:set))</tt>
+      </p>
+      <p>
+        This indicates that an older version of custom is shadowing
+        custom 1.9961 in your load-path.
+      </p>
+      <p>
+        <b>Solution:</b> Set your load-path so that the custom
+        1.9961 directory precedes the NT/Emacs Lisp distribution
+        directory in your load-path.
+      </p>
+    </blockquote>
+    <p>
+      <b>Problem:</b> On startup or when compiling jde.el, NT/Emacs
+      19.34.6 signals:
+    </p>
+    <blockquote>
+      <p>
+        <tt>Symbol's value as variable is void ((:version))</tt>
+      </p>
+    </blockquote>
+    <blockquote>
+      <p>
+        The latest version of browse-url.el refers to a defcustom
+        keywork :version that does not appear to be defined in the
+        backward compatiblity verion of custom (custom-1.9961).
+      </p>
+    </blockquote>
+    <blockquote>
+      <p>
+        <b>Solution:</b> Comment out line 340 in browse-url.el
+        (Thanks toJean-Dominique Sifantus &lt;jsifantu@tiac.net&gt;
+        for this fix.
+      </p>
+    </blockquote>
+    <p>
+      <b>Problem:</b> I cannot get w3 to display the <i>JDE User's
+      Guide</i> (<tt>jde.htm</tt>) from the JDE 1.9.4 <b>Help</b>
+      menu.
+    </p>
+    <blockquote>
+      <p>
+        <b>Solution:</b> Install the following patch (thanks to Les
+        Schaffer &lt;godzilla@netmeg.net&gt;)<br>
+         on <tt>jde.el</tt>:
+      </p>
+      <p>
+        <tt>*** jde.el~&nbsp;&nbsp;&nbsp;&nbsp; Fri Feb 27 18:19:09
+        1998</tt><br>
+         <tt>--- /usr/local/lib/xemacs/site-lisp/jde/jde.el&nbsp;
+        Sat Feb 28 15:58:11 1998</tt><br>
+         <tt>***************</tt><br>
+         <tt>*** 822,828 ****</tt><br>
+         <tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        (if jde-dir</tt><br>
+         <tt>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        (expand-file-name "doc/jde.htm" jde-dir))))</tt><br>
+         <tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (if jde-help</tt><br>
+         <tt>!&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (browse-url
+        jde-help&nbsp; browse-url-new-window-p)</tt><br>
+         <tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (signal
+        'error '("Cannot find JDE help file.")))))</tt><br>
+         <tt>&nbsp;</tt><br>
+         <tt>&nbsp; ;; speedbar</tt><br>
+         <tt>--- 822,828 ----</tt><br>
+         <tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        (if jde-dir</tt><br>
+         <tt>
+        &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+        (expand-file-name "doc/jde.htm" jde-dir))))</tt><br>
+         <tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (if jde-help</tt><br>
+         <tt>!&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (browse-url
+        (concat "file:" jde-help)&nbsp;
+        browse-url-new-window-p)</tt><br>
+         <tt>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (signal
+        'error '("Cannot find JDE help file.")))))</tt><br>
+         <tt>&nbsp;</tt><br>
+         <tt>&nbsp; ;; speedbar</tt>
+      </p>
+    </blockquote>
+    <p>
+      &nbsp;<br>
+      <b>Problem:</b> On Windows 95, when I select Browse JDK Doc
+      or Help, the browser opens and loads the<br>
+      required document,&nbsp; but the Emacs window stops
+      responding until I exit the browser.
+    </p>
+    <blockquote>
+      <p>
+        <b>Solution:</b>&nbsp; Change the definition of
+        shell-execute-url in your .emacs file to read as follows
+      </p>
+      <blockquote>
+        <p>
+          <tt>(defun shell-execute-url (url &amp;optional
+          new-window)</tt><br>
+           <tt>&nbsp; "Invoke the shell-execute-helper program to
+          call ShellExecute and launch</tt><br>
+           <tt>&nbsp;&nbsp;&nbsp;&nbsp; or re-direct a web browser
+          on the specified url."</tt><br>
+           <tt>&nbsp; (interactive "sURL: ")</tt><br>
+           <tt>;&nbsp; (call-process shell-execute-helper nil nil
+          nil url)</tt><br>
+           <tt>&nbsp; (start-process "shellex" nil
+          shell-execute-helper url))</tt>
+        </p>
+      </blockquote>
+    </blockquote>
+    <p>
+      <b>Problem:</b> I would like to change the default value of
+      the cc-mode customization variable c-basic-offset for use
+      with JDE - but alas, I've had no luck in doing so. No matter
+      what I've attempted, editing a Java source file always ends
+      up with the original value of 4 rather than the value of 2
+      that I've specified.
+    </p>
+    <blockquote>
+      <p>
+        cc-mode's default "style" for editing Java code (which JDE
+        inherits) resets c-basic-offset to 4 whenever you open a
+        Java buffer.
+      </p>
+    </blockquote>
+    <blockquote>
+      <p>
+        <b>Solution:</b> The following, which you should put in
+        your .emacs file, sets it back to 2.
+      </p>
+      <blockquote>
+        <p>
+          <tt>(defun my-jde-mode-hook ()</tt><br>
+           <tt>&nbsp; (setq c-basic-offset 2))</tt><br>
+           <tt>(add-hook 'jde-mode-hook 'my-jde-mode-hook)</tt><br>
+           &nbsp;
+        </p>
+      </blockquote>
+      <p>
+        <b>Note</b> The 19.34.6 version of NT/Emacs has a bug that
+        results in the name of the JDE mode hook variable being
+        <tt>jde-mode-hooks</tt>. Thus, the NT/Emacs 19.34.6
+        equivalent of the previous example is
+      </p>
+      <blockquote>
+        <p>
+          <tt>(defun my-jde-mode-hook ()</tt><br>
+           <tt>&nbsp; (setq c-basic-offset 2))</tt><br>
+           <tt>(add-hook 'jde-mode-hooks 'my-jde-mode-hook)</tt>
+        </p>
+      </blockquote>
+    </blockquote>
+    <p>
+      <b>Problem:</b> I start the debugger but the Jdb menu does
+      not appear on the Emacs menu bar as pictured in the user's
+      guide.
+    </p>
+    <blockquote>
+      <p>
+        <b>Solution:</b> Set an initial breakpoint in the jdb
+        command buffer and run to that breakpoint. Then, select the
+        Java source buffer in which the debug cursor appears. You
+        should see the Jdb menu on the menubar. Note: that the Jdb
+        menu appears only after an initial breakpoint has been
+        reached and when a Java source buffer is selected. See the
+        JDE User's Guide for more information.
+      </p>
+    </blockquote>
+    <p>
+      <b>Problem:</b> I am using the JDE with NT/Emacs 20.2.x. When
+      I run a Java application with a GUI, the application starts
+      but nothing appears.
+    </p>
+    <blockquote>
+      <p>
+        NT/Emacs 20.2.x is a development version that introduces
+        changes that break the JDE run command among other JDE
+        features. The JDE eventually will be updated to support
+        NT/Emacs 20.2, probably when a stable version appears,
+        possibly sooner.
+      </p>
+    </blockquote>
+    <blockquote>
+      <p>
+        <b>Solution:</b> Use NT/Emacs 19.34.6 until the JDE is
+        updated to support 20.2.
+      </p>
+    </blockquote>
+  </body>
+</html>

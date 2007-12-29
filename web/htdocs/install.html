@@ -1,0 +1,623 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type"
+content="text/html; charset=iso-8859-1">
+<meta name="GENERATOR" content="Microsoft FrontPage Express 2.0">
+<title>JDEE Installation Guide</title>
+</head>
+
+<body bgcolor="#FFFFFF">
+
+<h1>JDEE Installation Guide</h1>
+
+<p>Welcome to the <em>JDEE Installation Guide</em>. This guide
+shows you how to install the JDEE on Unix platforms (see <a
+href="install.html#Unix Installation">Unix Installation</a>) and on Windows platforms (see
+<em>Windows Installation</em> in <a href="install.html#Windows 95/98/NT Installation">English</a> or
+<a href="http://www.aheil.de/texte/emacs.html">German</a>). 
+See <a href="install.html#XEmacs Setup">XEmacs Setup</a> 
+for information on configuring XEmacs to run the JDEE.</p>
+
+<p><b>Note</b> If you are new to Emacs, you should read the
+<i>Init File</i> section in the <i>Customization </i>section of
+the online Emacs manual before attempting to install the JDEE. </p>
+
+<h3><a name="Unix Installation">Unix Installation</a></h3>
+
+<ol>
+    <li>Install the JDEE files on your file system. <p>The Unix
+        JDEE distribution file is a zipped tar file. The easiest
+        way to install the JDEE files is to copy the distribution
+        file to the directory where you want the JDEE to reside
+        permanently. Then enter</p>
+        <blockquote>
+            <p><font size="2" face="Courier New">gzip -cd jde-latest.tar.gz
+            | tar xvf -</font></p>
+        </blockquote>
+        <p>at the command line. This command will create a JDEE
+        subdirectory in the current directory and copy the JDEE
+        files and documentation to the newly created directory. </p>
+    </li>
+
+    <li>
+      Download the latest versions of Eric Ludlam's speedbar, eieio, 
+      and semantic bovinator packages and install them on your system, 
+      each in their own directory.
+
+      <p>You can download these packages from 
+         <a href="http://cedet.sourceforge.net">SourceForge</a>.
+      </p>
+
+       <p><strong>Note</strong> Emacs and XEmacs include earlier versions of speedbar
+         that are incompatible with the JDEE. You must delete the earlier version or
+         ensure that it is not on the Emacs load path. Otherwise you will get a Lisp error 
+         when trying to start Emacs.
+       </p>
+
+    </li>
+
+    <li>
+      Download the Emacs Lisp library package from the JDEE website in
+      in <a href="http://jdee.sunsite.dk/elib-1.0.tar.gz">compressed
+      tar</a> or <a href="http://jdee.sunsite.dk/elib-1.0.zip">zip</a>
+      format. Uncompress and install the package in a convenient
+      location, for example, in your Emacs site directory.<br><br>
+      </li>
+
+    <li>Update the Emacs Lisp load path.
+        
+        <p>You must tell Emacs where the JDEE and its required packages live. 
+           You can do this by adding Lisp forms to
+           your Emacs startup (<code>.emacs</code>) file that update the Emacs
+           load-path variable, which lists the paths that Emacs
+           searches when looking for Lisp packages required by
+           commands that you execute. The following is an example of
+           how to do this.</p>
+        
+        <p>
+	  <code>(add-to-list 'load-path (expand-file-name "~/emacs/site/jde/lisp"))</code><br>
+	  <code>(add-to-list 'load-path (expand-file-name "~/emacs/site/cedet/common"))</code><br>
+      <code>(load-file (expand-file-name "~/emacs/site/cedet/common/cedet.el"))</code><br>
+	  <code>(add-to-list 'load-path (expand-file-name "~/emacs/site/elib"))</code><br>
+        </p>
+   
+
+    </li>
+    <li>Ensure that the JDEE is loaded at Emacs startup. 
+
+        <p>To ensure this, add the following line to your <code>.emacs</code> file: </p>
+     
+            <p><code>(require 'jde)</code></p>
+
+        <p>Be sure to add this line after the line that updates
+        the load path (see step 3).</p>
+
+        <p><strong>Note</strong>  See <a href="_emacs_jde">minimal .emacs
+        file</a> for an example of the minimal setup file
+        required to run the JDEE with Emacs. </p>
+
+    </li>
+
+    <li>Compile the JDEE's Lisp files.
+
+        <p>
+          <strong>Note </strong> You do not have to compile the JDEE Lisp files
+          to use the JDEE. However, compiling the files can reduce Emacs startup
+          time and speed some operations.
+        </p>
+
+	<p>The easiest way to compile the files is to use the JDEE command
+	   <code>jde-compile-jde</code>.
+
+        <p>
+	  The JDEE's lisp directory contains a makefile that compiles the JDE
+          Lisp files.  The makefile assumes that you are using GNU Emacs
+	  and that the packages required by the JDEE are installed in the same 
+          directory as the JDEE package itself, i.e., the makefile assumes a directory
+          structure similar to the following:
+	</p>
+
+<p>
+<pre>
+  site
+    jde
+    speedbar
+    semantic
+    elib
+    eieio
+</pre>
+</p>
+	<p>
+	  If your installation does not fit these assumptions, edit the makefile to reflect
+          your installation.
+        </p>
+
+	<p>If Emacs is not on your path, you can specify it on the make command line, e.g.,<p>
+<p>
+<pre>
+make EMACS=d:/Applications/emacs/emacs.exe
+</pre>
+</p>
+
+	  
+    </li>
+
+</ol>
+
+<h3><a name="Windows 95/98/NT Installation">Windows 95/98/NT
+Installation</a></h3>
+
+<p>This section provides instructions for installing a full-featured
+JDEE setup on Windows. This section includes instructions for
+installing and integrating the following packages:</p>
+
+<ul type="disc">
+    <li>Emacs (see <a href="install.html#Installing Emacs">Installing Emacs</a>)</li>
+    <li>Cygnus Unix utilities (see <a
+        href="install.html#Installing Cygnus Unix Utilities">Installing
+        Cygnus Unix Utilities</a>)</li>
+    <li>JDK 1.2 (see <a href="install.html#Installing Java Tools">Installing
+        Java Tools</a>)</li>
+    <li>JDEE (see <a href="install.html#Installing the JDE">Installing the JDEE</a>)</li>
+</ul>
+
+<h4><a name="Installing Emacs">Installing Emacs</a></h4>
+
+<ol>
+    <li>Download the latest <a
+        href="ftp://ftp.gnu.org/gnu/windows/emacs/latest ">precompiled
+        version</a> of Emacs from the NT/Emacs ftp site. <p><b>Note</b>
+        The distribution comes in zipped tar format. Tape archive
+        (tar) format is a Unix file format for storing multiple
+        files in a single file for archiving or transport to
+        other systems. To unpack the Emacs distribution, you will
+        need an unzip utility that can handle zipped tar files.
+        The popular WinZip utility can handle zipped tar files.
+        You can also use Windows versions of the Unix gzip and
+        tar facilities to unzip and untar the Emacs distribution.
+        You can find 
+	<a href="ftp://ftp.cs.washington.edu/pub/ntemacs/utilities/i386">precompiled versions</a> 
+	of the compression and archive utilities at the NT/Emacs site.
+        </p>
+    </li>
+    <li>Unpack Emacs into a directory of your choice. <p>For
+        example, I unpacked my copy into <tt>d:/emacs</tt></p>
+        <p>You should find a file named README as a part of the
+        distribution. Be sure to read this file for information
+        on installing Emacs. </p>
+    </li>
+    <li>Register Emacs. <p>Let's assume that the directory in
+        which you have unpacked Emacs is <tt>d:/emacs</tt>. First,
+        run the program <code>addpm.exe</code> from the Emacs <code>bin</code>
+        directory. The easiest way to do this is to open a
+        Windows Explorer window on the <tt>bin</tt> directory (for
+        example, <tt>d:\emacs\bin</tt>) and double-click the <tt>addpm.exe</tt>
+        entry. Or you can invoke addpm.exe from a Windows command
+        shell by entering, for example, the following lines: </p>
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; <tt>cd d:\emacs\bin&nbsp;&nbsp;&nbsp;</tt>
+        <br>
+        <tt>&nbsp;&nbsp; addpm.exe</tt> </p>
+        <p>Invoking <tt>addpm.exe</tt> creates a set of registry
+        keys that tell Emacs where to find its support files (lisp,
+        info, etc.). It also creates a folder containing an icon
+        linked to <tt>runemacs.exe</tt> (a wrapper program for
+        invoking Emacs). </p>
+        <p>Now, to run Emacs, simply click on the icon in the
+        newly created folder or invoke <tt>runemacs.exe</tt> from
+        a command prompt. </p>
+    </li>
+    <li>Create a home directory in your computer's filesystem.
+
+      <p>The home directory is the directory where Emacs expects to
+        find your Emacs startup file (see next step). The home
+        directory is also where the bash shell (see <a
+        href="install.html#Installing Cygnus Unix Utilities">Installing the Cygnus Unix
+        Distribution</a>) expects to find the various startup
+        files that it recognizes. Creating a home directory
+        involves two steps. First, create the directory. It can
+        be located anywhere you choose and can have any name. (I
+        follow a pseudo Unix convention on my system by naming my
+        home directory: <tt>c:\usr\home</tt>.). Then, create a
+        HOME environment variable that points to the home
+        directory. </p>
+        <p><b>Note:</b> Creating a home directory is not a
+        prerequisite to installing Emacs. If you do not specify a
+        home directory via a HOME variable, Emacs assumes that
+        your home directory is c:\. However, putting your startup
+        file(s) in a separate directory makes them easier to
+        manage. </p>
+    </li>
+    <li>Create an empty Emacs startup file in your home directory.
+        <p>The startup file can be named either <tt>_emacs</tt>
+        or <tt>.emacs</tt>. If you have both files in your home
+        directory, Emacs will load the <tt>.emacs</tt> file and
+        ignore <tt>_emacs</tt>. For more information on startup
+        files, see <a
+        href="http://www.cs.washington.edu/homes/voelker/ntemacs.html#startup">startup</a>.
+        </p>
+    </li>
+    <li>Create an Emacs add-on directory for storing Emacs Lisp
+        packages that do not come with the core Emacs
+        distribution, a prime example, being the JDE itself. <p>Some
+        Emacs users simply dump add-on packages into the Emacs
+        core lisp directory. However, it is better to keep add-on
+        packages in a separate directory to avoid overwriting the
+        add-on packages when you update the core distribution. On
+        my system, the add-on directory is located at <tt>c:\usr\home\emacs\site</tt>.
+        </p>
+        <p>You must add the site directory to the Emacs load-path,
+        i.e., the list of directories where Emacs searches for
+        packages that you require. You do this by inserting at
+        the head of your <tt>.emacs</tt> file Lisp code that
+        prepends the site directory to the load path, e.g., </p>
+
+
+<pre>    
+  (add-to-list 'load-path (expand-file-name "~/emacs/site/jde/lisp"))
+  (add-to-list 'load-path (expand-file-name "~/emacs/site/semantic"))
+  (add-to-list 'load-path (expand-file-name "~/emacs/site/speedbar"))
+  (add-to-list 'load-path (expand-file-name "~/emacs/site/elib"))
+  (add-to-list 'load-path (expand-file-name "~/emacs/site/eieio"))
+</pre>
+
+        <p>Note that, following Unix convention, NT/Emacs
+        replaces the tilde (~) character in paths with the path
+        of your home directory.</p>
+    </li>
+
+    <li>
+      <p>Set up Emacs to use a browser.</p>
+    
+      <p>See <a href="install.html#SpecifyingBrowser">Specifying a Browser</a>
+      for information on configuring Emacs to use a browser.</p>
+    </li>
+
+    <li>Set up Emacs to emulate Windows editor key bindings and
+        mouse selection mode.</li>
+</ol>
+
+<p>Emacs's default text selection mode and cut-and-paste key
+bindings differ from the CUA standard used by Windows. (Hardly
+surprising, as Emacs antedates both CUA and Windows). If you
+prefer the CUA mode (as I do), you can configure Emacs to emulate
+CUA mode. To do this, first copy the package <a
+href="http://jdee.sunsite.dk/contrib/cua-mode.el">cua-mode.el</a> into your Emacs site
+directory (see step 6 above). Then, insert the following code
+into your <tt>.emacs</tt> file (see step 5 above).</p>
+
+<pre>(pc-selection-mode) 
+(load &quot;cua-mode&quot;)
+(CUA-mode t) </pre>
+
+<h4><a name="Installing Java Tools">Installing Java Tools</a></h4>
+
+<p>The JDEE relies on external tools for compiling, running, and
+debugging Java programs. The JDEE specifically supports the Java
+Development Kit available at Sun Microsystem's <a
+href="http://www.javasoft.com/products/index.html">Java products
+&amp; APIs</a> site. The JDEE supports all versions of the JDK.You
+can use any other command-line development tool compatible with
+those provided by the JDK.<p>
+
+<p>The JDEE works with Jikes, the
+Java compiler developed by IBM Corp's alphaWorks. Written in C++,
+Jikes is lightening quick, is compatible with Emacs and the other
+JDK tools, and is available in Windows as well as Solaris and
+Linux versions. Jikes can be downloaded from the 
+<a href="http://oss.software.ibm.com/developerworks/opensource/jikes/project/">Jikes home
+page</a>.</p>
+
+<p><strong>Note</strong> One drawback of Jikes is that the class files that
+the current version generates are not compatible with the Java Platform Debug 
+Architecture (JPDA) used by the JDEE's debugger, JDEbug. The Jikes team is 
+aware of this problem but does not regard fixing it as a priority.</p>
+
+
+<h4><a name="Installing Cygnus Unix Utilities">Installing Cygwin</a></h4>
+
+<p>This step is optional. You don't need the Cygwin
+to run the JDEE. However, you may find some of the utilities
+provided by the distribution useful for developing Java
+applications, in particular, the ports of the GNU <tt>make</tt>
+utility and the <tt>bash</tt> shell. </p>
+
+<ol>
+    <li>
+      <p>The Cygwin setup program copies the Cygwin distribution
+      from the <a href="http://cygwin.com">Cygwin site</a> and installs the distribution on your
+      system. Click <a href="http://cygwin.com/setup.exe">here</a>
+      to run the setup program.
+      </p>
+    </li>
+   <li>Set up a Unix style directory hierarchy in your Windows
+        file system. <p>Cygnus and Emacs have a Unix heritage and
+        retain some of their Unix characteristics. You can make
+        them feel more at home in a Windows environment by
+        providing a Unix style hierarchy. On my system, the
+        hierarchy resides on my home directory. It has the
+        following structure: </p>
+        <p><tt>c:\usr</tt> <br>
+        &nbsp; <tt>home</tt> <br>
+        &nbsp;&nbsp;&nbsp; <tt>emacs</tt> </p>
+        <p>Following Unix tradition, I use the home directory to
+        store my Emacs and bash startup files. (bash is a Unix
+        shell that comes with the Cygwin distribution. I
+        recommend that you use bash in place of the native
+        Windows shell, command or cmd.) My home directory
+        includes a subdirectory named <tt>emacs</tt>. I use this
+        to store add-on software packages for Emacs that do not
+        come with the NT/Emacs distribution, such as the psgml
+        package and gnuserv.
+	
+	<p><strong>Note</strong> Using a separate directory to store
+           add-on packages simplifies upgrading Emacs.</p>
+    </li>
+    <li>Set your system's path to include the directory containing
+        Cygwin  executables.
+        
+       <p>For example, suppose that you
+        installed Cygwin on your d drive. You should then update
+        the path in your autoexec.bat file (on Windows 95) or
+        Environment variables panel (on Windows/NT) to point to </p>
+        <p><code>d:\Cygwin\bin</code> </p>
+    </li>
+    <li>Define a <code>HOME</code> environment variable that points to your
+        home directory (<code>c:\usr\home</code>). <p>For example, on Windows
+        95, enter the following in your <code>autoexec.bat</code>
+        file: </p>
+        <p><tt>set home=c:/usr/home</tt> </p>
+        <p>Emacs, Cygwin, and other expatriate Unix tools use
+        this variable to find your home directory. </p>
+    </li>
+    <li>Create a bash startup file in your home directory. <p>Use
+        any text editor to create the file. Then save it in your
+        home directory under the name <tt>.bashrc</tt>. The
+        following is my <tt>.bashrc</tt> file, which I copied
+        from a bash expert and modified slightly. I don't
+        understand it fully, as I am no bash expert myself, and I
+        suspect that some of it does not even apply to a Windows
+        environment. However, it works, and that's good enough
+        for me. </p>
+        <p><tt>#! /usr/bin/sh</tt> <br>
+        <tt># $Id: .bashrc 1.1 1997/05/22 16:31:48 paulk Exp
+        paulk $</tt> </p>
+        <p><tt>export PATH=&quot;.:${PATH}&quot;</tt> <br>
+        <tt>export HOME=/usr/home</tt> <br>
+        <tt>export TMOUT=3600</tt> <br>
+        <tt>export HISTCONTROL=ignoredups</tt> <br>
+        <tt>export FIGNORE='~:.o'</tt> <br>
+        <tt>export PS1='//\h/.../\W \$ '</tt> </p>
+        <p><tt># home key</tt> <br>
+        <tt>bind '&quot;\e[1~&quot;:beginning-of-line'</tt> </p>
+        <p><tt># del key</tt> <br>
+        <tt>bind '&quot;\e[3~&quot;:delete-char'</tt> </p>
+        <p><tt># end key</tt> <br>
+        <tt>bind '&quot;\e[4~&quot;:end-of-line'</tt> </p>
+        <p><tt># pgup key</tt> <br>
+        <tt>bind '&quot;\e[5~&quot;:history-search-forward'</tt> </p>
+        <p><tt># pgdn key</tt> <br>
+        <tt>bind '&quot;\e[6~&quot;:history-search-backward'</tt>
+        </p>
+        <p><tt>alias cp='cp -r'</tt> <br>
+        <tt>alias rm='rm -r'</tt> <br>
+        <tt>alias ls='ls -F'</tt> <br>
+        <tt>alias dir='ls -laF'</tt> <br>
+        <tt>alias edit='notepad'</tt> <br>
+        &nbsp; </p>
+    </li>
+    <li>If you plan to use the <tt>bash</tt> shell, add the
+        following lines to your <tt>.emacs</tt> file: <blockquote>
+            <p><font size="2" face="Courier New">(setq binary-process-input
+            t)</font> <br>
+            <font size="2" face="Courier New">(setq w32-quote-process-args
+            ?\&quot;)</font> <br>
+            <font size="2" face="Courier New">(setq shell-file-name
+            &quot;bash&quot;) ;; or sh if you rename your bash
+            executable to sh.</font> <br>
+            <font size="2" face="Courier New">(setenv &quot;SHELL&quot;
+            shell-file-name)</font> <br>
+            <font size="2" face="Courier New">(setq explicit-shell-file-name
+            shell-file-name)</font> <br>
+            <font size="2" face="Courier New">(setq explicit-sh-args
+            '(&quot;-login&quot; &quot;-i&quot;))</font></p>
+        </blockquote>
+    </li>
+</ol>
+
+<h4><a name="Installing the JDE">Installing the JDE</a></h4>
+
+<p>Installing the JDEE entails downloading the JDEE distribution,
+unpacking it into a directory on your filesystem, and configuring
+Emacs to run the JDEE. The following details these steps. </p>
+
+<ol>
+    <li>Download the Windows version of the JDEE distribution (see&nbsp;
+        <a href="rootpage.html#Downloading">Downloading the JDE</a>).
+        <p>The JDEE Windows distribution file is a standard
+        Windows zip file that contains the JDEE directory and its
+        contents. You can use any Windows unzip program to unzip
+        the JDEE. </p>
+    </li>
+
+    <li>Unzip the JDEE into your Emacs add-on package directory.</li>
+    <br><br>
+
+   <li>
+      Download the latest versions of Eric Ludlam's speedbar
+      and semantic bovinator packages and install them on your system, 
+      each in their own directory.
+
+      <p>You can download these packages from 
+         <a href="http://cedet.sourceforge.net">SourceForge</a>.
+      </p>
+
+       <p><strong>Note</strong> Emacs and XEmacs include earlier versions of speedbar
+         that are incompatible with the JDEE. You must delete the earlier version or
+         ensure that it is not on the Emacs load path. Otherwise you will get a Lisp error 
+         when trying to start Emacs.
+       </p>
+
+    </li>
+
+    </li>
+
+    <li>
+      Download the Emacs Lisp library package from the JDE website in
+      in <a href="http://jdee.sunsite.dk/elib-1.0.tar.gz">compressed
+      tar</a> or <a href="http://jdee.sunsite.dk/elib-1.0.zip">zip</a>
+      format. Uncompress and install the package in a convenient
+      location, for example, in your Emacs site directory.<br><br>
+      </li>
+
+    <li>Update the Emacs Lisp load path.
+
+        <p>You must tell Emacs where the JDEE and its required packages live. 
+           You can do this by adding Lisp forms to
+           your Emacs startup (<code>.emacs</code>) file that update the Emacs
+           load-path variable, which lists the paths that Emacs
+           searches when looking for Lisp packages required by
+           commands that you execute. The following is an example of
+           how to do this.</p>
+        
+        <p>
+	  <code>(add-to-list 'load-path (expand-file-name "~/emacs/site/jde/lisp"))</code><br>
+	  <code>(add-to-list 'load-path (expand-file-name "~/emacs/site/semantic"))</code><br>
+	  <code>(add-to-list 'load-path (expand-file-name "~/emacs/site/speedbar"))</code><br>
+	  <code>(add-to-list 'load-path (expand-file-name "~/emacs/site/elib"))</code><br>
+	  <code>(add-to-list 'load-path (expand-file-name "~/emacs/site/eieio"))</code><br>
+        </p>
+
+    </li>
+
+
+    <li>Tell Emacs to load the JDEE at startup. <p>To ensure this,
+        add the following lines to your <code>.emacs</code> file: 
+</p>
+        <blockquote>
+            <p><font size="2" face="Courier New">(require 'jde)</font></p>
+        </blockquote>
+        <p>Be sure to add this line after the line that updates
+        the load path (see step 3 above). </p>
+
+        <p><strong>Note</strong>  See <a href="_emacs_jde">minimal .emacs
+        file</a> for an example of the minimal setup file
+        required to run the JDEE with Emacs. </p>
+
+    </li>
+
+    <li>Compile the JDEE's Lisp files.
+
+        <p>
+          <strong>Note </strong> You do not have to compile the JDEE Lisp files
+          to use the JDEE. However, compiling the files can reduce Emacs startup
+          time and speed some operations.
+        </p>
+
+	<p>The JDEE command <code>jde-compile-jde</code> compiles the JDEE Lisp code.
+	   It is the easiest way to compile the JDEE Lisp.
+	</p>
+
+        <p>
+	  The JDEE's lisp directory contains a makefile that compiles the JDEE
+          Lisp files.  The makefile assumes that you are using GNU Emacs
+	  and that the packages required by the JDEE are installed in the same 
+          directory as the JDEE package itself, i.e., the makefile assumes a directory
+          structure similar to the following:
+	</p>
+
+<p>
+<pre>
+  site
+    jde
+    speedbar
+    semantic
+    elib
+    eieio
+</pre>
+</p>
+	<p>
+	  If your installation does not fit these assumptions, edit the makefile to reflect
+          your installation.
+        </p>
+
+	<p>
+	  You can specify the path to Emacs or XEmacs on the commmand line, i.e., 
+	</p>
+<p>
+<pre>
+make EMACS=d:/Applications/XEmacs/XEmacs-21.1/i386-pc-win32/xemacs
+</pre>
+</p>
+    </li>
+
+</ol>
+
+<h4><a name="SpecifyingBrowser">Specifying a Browser</a></h4>
+
+    <p>The JDEE delegates the task of displaying HTML documents, such
+       as <i>The JDEE User's Guide</i>, to <tt>browse-url</tt>, Emacs'
+       generic interface to HTML browsers. The default browse-url
+       browser in the latest version of NT/Emacs is the Windows
+       default HTML browser. The default browse-url browser on Unix
+       systems is Netscape. You can customize browse-url to use other
+       browsers by executing <tt>M-x customize-group
+       browse-url</tt> and editing and saving the appropriate 
+       configuration variables.</p>
+
+     <p><b>Note</b> The Windows version of <tt>browse-url</tt> uses
+       the default action associated with the html file type on your
+       system to display a URL (execute <tt>C-h f
+       w32-shell-execute</tt> for more information).  You can thus
+       configure <tt>browse-url</tt> indirectly by configuring the default
+       Windows action for html files. To do this, select
+       <b>View->Folder Options</b> on the Windows/NT or Windows 95
+       Explorer menu (note we're talking about the <i>file</i>, not
+       the <i>Internet</i> Explorer). For example, when you install
+       Internet Explorer, the setup program for Internet Explorer
+       defines actions for opening HTML files in an existing window or
+       a new window, respectively. You can set either of these as the default open
+       action, according to your preference.</p>
+  
+	<p><b>Note</b> You can configure versions of NT/Emacs 
+        earlier than 20.4 to use the default Windows browser. For
+        more information, see <a
+	href="http://www.cs.washington.edu/homes/voelker/ntemacs.html#browse-url">shellex</a>
+	and the <a href="trouble-shooting.htm">JDE Troubleshooting Guide</a>). However,
+        you can get the same result with far less effort simply 
+        by upgrading to the latest version of NT/Emacs.</p>
+
+<h3><a name="XEmacs Setup">XEmacs Setup</a></h3>
+
+<p>The XEmacs distribution includes a version of the JDE (usually not the latest). If you want to use this version, you must select it during XEmacs installation or afterwards, using XEmacs' Manage Packages command.</p>
+
+<p>If you have installed the version of the JDE that came with the XEmacs distribution and it is out of date, which is usually the case, you may want to install the latest version. To install the latest version of the JDEE:
+
+<ol>
+<li>
+   Unzip the JDEE distribution in any convenient directory on your system.
+   <br><br>
+</li>
+<li>
+   Delete or rename the ..XEmacs/xemacs-packages/etc/jde directory created by the XEmacs package installer.
+<p>This step is crucial. The JDEE package includes both Lisp and nonLisp files. XEmacs and the standard JDE distribution have different ideas about where to store these files. The XEmacs installer stores the JDEE's lisp files in the xemacs-packages lisp directory and the JDEE's non-lisp files in the xemacs-packages etc directory. By contrast, the JDEE distribution stores its lisp files and non-lisp files in various subdirectories of the directory where the JDE distribution is unpacked. The JDEE decides where to look for its nonLisp files based on whether the XEmacs/xemacs-packages/etc/jde directory exists. If the directory exists, the JDEE assumes that it was installed by the XEmacs installer and thus looks for its nonLisp files in the etc/jde directory. If the directory does not exist, the JDEE assumes that it was installed manually and thus looks for its nonLisp files in the directory in which it was unpacked. By deleting or renaming the etc/jde directory in the XEmacs hierarchy, you are telling the JDEE that it was manually installed.</p>
+</li>
+<li>
+Follow the instructions given elsewhere in this guide for updating your .emacs file to include the JDEE.
+<br><br>
+</li>
+
+  <li>
+     If you have not already done so, install the XEmacs debug package. 
+
+     <p>The debug package includes the <code>gud</code> package which
+     is required by the JDE.</p>
+
+     <p><strong>Note</strong> For help on installing XEmacs packages, choose 
+        <strong>Options-&gt;Manage Packages-&gt;Help</strong> from the XEmacs menubar.
+     </p>
+  </li>
+</ol>
+
+</body>
+</html>

@@ -1,0 +1,188 @@
+<html>
+
+<head>
+<meta http-equiv="Content-Type"
+content="text/html; charset=iso-8859-1">
+<meta name="GENERATOR" content="Microsoft FrontPage Express 2.0">
+<title>JDEE Developer's Corner</title>
+</head>
+
+<body>
+
+<h1>JDEE Developer's Corner</h1>
+
+<p>Welcome to the JDEE Developer's Corner. This page explains what
+you need to do to participate in the development of the JDEE.</p>
+
+<h2>Becoming a JDEE Developer</h2>
+
+<p>To become a JDEE developer: </p>
+
+<ol>
+    <li>
+      <p>Subscribe to the JDE developer <a href="developerscorner.html#MailingLists">mailing lists</a>.</p>
+    </li>
+    <li>
+      <p>Install cvs client software on your development system
+      (see <a href="developerscorner.html#Repository" >Using the JDE Source Code Repository</a>).</p>
+    </li>
+    <li>
+      <p>Create a JDEE sandbox on your development system.</p>
+    </li>
+    <li>
+      <p>Download and install <a href="http://jdee.sunsite.dk/bugtrack-1.3.1.tar.gz" >Bugtrack</a>.<p>
+
+      <p>Bugtrack is the Emacs-based bugtracking
+      system used to track JDEE bugs and new feature and feature
+      enhancement requests. The Bugtrack database for the JDEE, BUGS, is in the JDEE's
+      root directory. Use Bugtrack as your to-do list.</p>
+    </li>
+    <li>
+      <p>Discuss potential assignments with the <a
+      href="mailto:paulk@mathworks.com">JDEE development team
+      leader</a>.
+      </p>
+    </li>
+    <li>
+      <p>Implement and test features/bug fixes in your sandbox.</P>
+    </li>
+    <li>
+      <p>Update the source repository.</p>
+    </li>
+    <li>
+      <p>Post a notice to <a href="mailto:jde-devel@sunsite.dk" >jde-devel</a>
+      describing the changes you have made.
+      </p>
+    </li>
+</ol>
+
+<h2><a name="#Repository">Using the JDEE Source Code Repository</a></h2>
+
+<h3>About the Source Code Repository</h3>
+
+<p>The JDEE source code repository contains the latest development
+version of the JDEE source code. The repository is maintained by
+Sunsite Denmark and controlled by the Concurrent Version System
+(CVS) system. Anyone with Internet access and CVS client
+software can check source files out of the repository.
+Only authorized persons can update the repository.</p>
+
+<h3>Installing CVS Client Software</h3>
+
+<p>You need to install CVS client software on your system. The
+client allows you to check source files out of the repository,
+and, if you have commit access, commit updated files to the
+repository. CVS client software is widely and freely available.
+If you plan to develop under Windows, I recommend that you use
+Cyclic's <a href="cvs-1_10-win.zip">Windows port</a> of the CVS
+client. The CVS client is a command-line application. The <a
+href="http://jdee.sunsite.dk/pcl-cvs.tar.gz">pcl-cvs</a> package provides an Emacs
+interface to the client.</p>
+
+<h3>Updating the Repository</h3>
+
+<p>Developers can update the source code in the repository by </p>
+
+<ul>
+    <li>posting patches to the JDEE <a
+        href="mailto:jde-patches@sunsite.dk">patches mailing
+        list</a></li>
+    <li>committing updated files to the repository via CVS</li>
+</ul>
+
+<p>Only developers with commit access to the repository can
+submit changes directly. Everyone else must submit changes to the
+patches mailing list. The changes are reviewed and committed by
+developers with commit accces.</p>
+
+<h4>Requesting Commit Access to the Repository</h4>
+
+<p>You may request commit access to the repository. Before doing
+so, it is a good idea to first submit a few changes via the
+patches mailing list to establish your credentials as a
+developer. Then, email your request to the <a
+href="mailto:paulk@mathworks.com">repository administrator</a>.
+Your request should specifiy the following information: </p>
+
+<ul>
+    <li>user name by which you would like to be known to the
+        repository</li>
+    <li>password to gain access to the repository (specify if the
+        password is crypt-encoded)</li>
+    <li>email address to which repository notifications should be
+        sent</li>
+</ul>
+
+<p>You will be notified by email when you have been granted
+commit access.</p>
+
+<h4>Logging onto the Repository</h4>
+
+<p>If you have commit access, you can log into the repository as
+yourself. To log in as yourself, open a command shell and enter:</p>
+
+<p><font face="Courier">cvs -d
+:pserver:USERNAME@sunsite.dk:/pack/anoncvs login</font></p>
+
+<p>where USERNAME is your user name. The cvs client prompts you
+to enter your password. </p>
+
+<p>Anyone can login into the repository anonymously. As an
+anonymous user, you have read but not write access to the
+repository. To log in anonymously, enter</p>
+
+<p><font face="Courier">cvs -d
+:pserver:cvs@sunsite.dk:/pack/anoncvs login</font></p>
+
+<p>Then, enter <font face="Courier">cvs</font> at the password
+prompt.</p>
+
+<h4>Creating a JDEE Sandbox</h4>
+
+<p>To create a sandbox, log into the repository. Next change to
+the directory on your system in which you want to create the
+sandbox. Then check out the JDEE source code. The following
+example illustrates how to create a sandbox, using a command
+shell:</p>
+
+<p><font face="Courier">&gt; cvs -d
+:pserver:cvs@sunsite.dk:/pack/anoncvs login<br>
+(Logging in to cvs@sunsite.dk)<br>
+CVS password: cvs<br>
+&gt; mkdir jde-sandbox<br>
+&gt; cd jde-sandbox<br>
+&gt; cvs -d :pserver:cvs@sunsite.dk:/pack/anoncvs co jde<br>
+... (checkout messages)<br>
+&gt; cvs -d :pserver:cvs@sunsite.dk:/pack/anoncvs logout</font></p>
+
+
+<h2><a name="MailingLists"></a>Communicating with Other JDEE Developers</a></h2>
+
+<p>JDE developers use the following mailing lists to coordinate
+development activities: </p>
+
+<ul>
+    <li><a href="mailto:jde-devel@sunsite.dk">jde-devel</a> <p>Used
+        by developers to discuss JDE development issues and
+        business. The JDE source code repository sends commit and
+        watch notifications to this mailing list as well. To
+        subscribe, send an empty message to <a
+        href="mailto:jde-devel-subscribe@sunsite.dk">jde-devel-subscribe</a>.
+        To unsubscribe, send an empty message to <a
+        href="mailto:jde-devel-unsubscribe@sunsite.dk">jde-devel-unsubscribe</a>.</p>
+    </li>
+    <li><a href="mailto:jde-patches@sunsite.dk">jde-patches</a>
+        <p>Used by developers who do not commit access to the
+        repository to post patches to the JDE source code.
+        Patches posted to this mailing list are reviewed and
+        committed by members who do have commit access. To
+        subscribe, send an empty message to <a
+        href="mailto:jde-patches-subscribe@sunsite.dk">jde-patches-subscribe</a>.
+        To unsubscribe, send an empty message to <a
+        href="mailto:jde-patches-unsubscribe@sunsite.dk">jde-patches-unsubscribe</a>.</p>
+    </li>
+</ul>
+
+
+</body>
+</html>

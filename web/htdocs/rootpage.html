@@ -1,0 +1,517 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 3.2//EN">
+<html>
+
+  <head>
+    <meta http-equiv="Content-Type" content=
+    "text/html; charset=iso-8859-1">
+    <meta name="GENERATOR" content=
+    "Microsoft FrontPage Express 2.0">
+    <title>
+      JDEE Home Page
+    </title>
+  </head>
+
+  <body bgcolor="#FFFFFF" text="#000000" link="#0000FF" vlink= 
+  "#C0C0C0">
+
+    <p>
+       <a name="Top"><img src="images/jdelogo.gif" width="505"
+      height="138" alt="JDEE logo"></a><br>
+    </p>
+
+    <hr color="#800080">
+    <p>
+       Welcome to the home of the  JDEE, an add-on software package that turns
+       Emacs into a comprehensive system for creating, editing,
+       debugging, and documenting Java applications. This site aims
+       to provide you with complete information on downloading and
+       installing the JDEE and obtaining technical support. The
+       JDEE maintainers would like to thank <a href= 
+      "http://sunsite.dk">SunSITE Denmark</a> for serving as the
+       JDEE's host for many years. JDEE is now in the process of
+       moving to <a href="http://sourceforge.net/projects/jdee/">
+       sourceforge</a>.
+    </p>
+
+     <p><b>Note</b> For additional information on installing
+     and using the JDEE, see
+     <a href="http://wttools.sourceforge.net/emacs-stuff/emacsandjdee.html">
+      "Emacs and JDEE as software development environment"</a>
+      by <a href="mailto:kobit@users.sourceforge.net">Artur Hefczyc</a>.
+     </p>
+
+    <h2>
+       About the JDEE
+    </h2>
+    <p>
+       The JDEE is a software  package that interfaces Emacs to
+      command-line Java development tools (for example, JavaSoft's
+      JDK). JDEE features include:
+    </p>
+    <ul type="square">
+      <li>
+        JDEE menu with compile, run, debug, build, browse, project,
+        and help commands
+      </li>
+      <li>
+        syntax coloring
+      </li>
+      <li>
+        auto indentation
+      </li>
+      <li>
+        compile error to source links
+      </li>
+      <li>
+        source-level debugging
+      </li>
+      <li>
+        source code browsing
+      </li>
+      <li>
+        make file support
+      </li>
+      <li>
+        automatic code generation
+      </li>
+      <li>
+        Java source interpreter (Pat Neimeyer's BeanShell)
+      </li>
+    </ul>
+    <p>
+       The JDEE supports both Emacs (Unix and Windows versions) and
+      XEmacs. It is freely available under the GNU public license.
+    </p>
+    <p><strong>Note</strong> Windows 2000 has a bug that hangs JDEbug, the JDEE's debugger.
+    To run JDEbug on Windows 2000, you must install Service Pack 2, which
+    fixes the bug.</p>
+    <p>
+       See <a href="quicktour.html">JDEE Quick Tour</a> for a quick
+      tour of the JDEE's capabilities.
+    </p>
+    <h2>
+       <a name="JDEE Requirements"></a>JDEE Requirements
+    </h2>
+    <p>
+       The JDEE requires the following software:
+    </p>
+    <ul type="square">
+      <li>
+        <p>
+	The latest version of <a href="http://www.gnu.org/">Emacs</a> or
+	<a href="http://www.xemacs.org/">XEmacs</a>
+	on Unix platforms; <a href= 
+	"http://www.cs.washington.edu/homes/voelker/ntemacs.html">
+	NT/Emacs</a> on Windows platforms.
+        </p>
+        <p>
+	The JDEE works with previous minor versions of Emacs and
+	XEmacs 20. However, technical support is provided only
+	for the latest versions.
+        </p>
+     </li>
+      
+      <li>
+	<p>The latest version of the
+	<a href="http://cedet.sourceforge.net" >Collection of Emacs 
+	Development Environment Tools (CEDET)</a> developed by Eric
+	Ludlam
+	</p>
+      </li>
+      
+    <li>
+        <p>The Emacs Lisp library (elib) package. You can download the package
+           in <a href="http://jdee.sunsite.dk/elib-1.0.tar.gz">compressed tar</a> or <a href="http://jdee.sunsite.dk/elib-1.0.zip">zip</a>
+           format from the JDEE web site.
+	</p>
+      <li>
+        <p>
+           <a href= 
+          "http://java.sun.com/products/">
+          Java Development Kit (JDK)</a> or compatible set of Java
+          development tools (compiler, virtual machine, debugger,
+          class libraries, etc.)
+        </p>
+      </li>
+      <li>
+        <p>
+           Web browser (e.g., Netscape or Internet Explorer) for
+          viewing documentation.
+        </p>
+        <p>
+           See <a href="install.html#SpecifyingBrowser">Specifying
+          a Browser</a> for information on configuring Emacs to use
+          a browser.
+        </p>
+      </li>
+    </ul>
+    <ul type="square">
+      <li>
+        <a href="http://sourceware.cygnus.com/cygwin/">bash</a> or
+        other Unix-style shell highly recommended for Windows95/NT
+        environments.
+      </li>
+    </ul>
+
+    <p>
+      In addition to the required packages, I recommend that
+      you also install the 
+      <a href="http://ecb.sourceforge.net">Emacs Code Browser (ECB)</a>.
+      ECB greatly facilitates the JDEE's use in developing
+      applications that comprise many classes.
+    </p>
+ 
+    <h2>
+       <a name="Downloading"></a>Downloading the JDEE
+    </h2>
+    
+    <!-- TODO: Upload these to the sourceforge files area -->
+    <p>
+    To download JDEE, visit the <a href=
+    "http://sourceforge.net/project/showfiles.php?group_id=210946">project
+    download area</a>.
+    During the move to sourceforge, JDEE 2.3.5.1, the current
+    production version, is still available from sunsite in <a
+    href="http://jdee.sunsite.dk/jde-latest.zip">zip</a> (for Windows)
+    or <a href="http://jdee.sunsite.dk/jde-latest.tar.gz">zipped
+    tar</a> format (for Unix).  See the JDEE <a
+    href="ReleaseNotes.txt">release notes</a> for a description of the
+    changes included in the production release.
+    </p>
+
+<!--    <p> -->
+<!--   A beta version (JDEE 2.3.4beta6) of the next release is available -->
+<!--    in <a href="jde-beta.zip">zip</a> (for Windows) or -->
+<!--    <a href="jde-beta.tar.gz">zipped tar</a> format (for Unix). -->
+<!--    See the JDEE <a href="ReleaseNotes-beta.txt">beta release notes</a> for  -->
+<!--    a description of the changes included in the beta release. -->
+<!--    </p> -->
+    
+
+    <p>
+       See <a href="install.html">Installing the JDEE</a> for
+      information on installing the JDEE on a Unix or Windows
+      system.
+    </p>
+
+    <h3>Download Script</h3>
+    <p>Artur Hefczyc has created a Unix shell script that downloads, unzips,
+    and compiles the JDEE and all the packages that it requires. See the
+    <a href="http://wttools.sourceforge.net/emacs-stuff/package.html#install-jdee">
+    script help page</a> for more information.
+    </p>
+    
+    <h3>Downloading Bug Fixes</h3>
+    
+    <p>
+    Bug fix notices posted to the JDEE mailing list may instruct you to
+    download patched files from the
+    <a href="http://sunsite.dk/cvsweb/jde">JDEE's CVS repository</a>.
+    You should use the repository only for this purpose. Do not try to use
+    the repository to update your instance of the JDE to the latest
+    development version as the development version may be unstable.
+    </p>
+
+    <h2>
+       <a name="Documentation"></a>JDEE Documentation
+    </h2>
+    <p>
+       The JDEE distribution includes the <a href=
+      "jdedoc/html/jde-ug/jde-ug.html" target="JDEE User's Guide">JDEE User's Guide</a>. 
+       You can also get help via the Emacs M-x apropos and Ctl-h commands.
+    </p>
+    <h2>
+       Contributed Software
+    </h2>
+    <p>
+       See <a href="contributions.html">Contributed
+      Software</a> for a list of tools contributed by JDEE users
+      that you can download from this site.
+    </p>
+    <h2>
+       <a name="MailingList"></a>JDEE Mailing List and Newsgroup
+    </h2>
+    <p>
+       The JDEE mailing list provides a technical support, design,
+      and news forum for JDEE. It has more than 600 members.
+      If you are having problems setting up or using the JDEE, would
+      like to propose and discuss enhancements, or simply be
+      advised of the latest JDEE developments, this is the place to
+      turn.</p>
+      <ul>
+        <li>
+          To subscribe to the list, send an empty message to the <a href= 
+          "mailto:jde-subscribe@sunsite.dk">JDEE subscribe server</a>.
+        </li>
+         <li>
+           To remove yourself from the list, send an empty
+           message to the <a href=
+           "mailto:jde-unsubscribe@sunsite.dk">JDEE unsubscribe
+           server</a>. 
+         </li>
+         <li>
+          To receive a daily digest of messages mailed to
+          the list, send an empty message to the <a href= 
+          "mailto:jde-digest-subscribe@sunsite.dk">JDEE digest subscribe server</a>.
+         </li>
+         <li>
+          To stop receiving a daily digest of messages mailed to
+          the list, send an empty message to the <a href= 
+          "mailto:jde-digest-unsubscribe@sunsite.dk">JDEE digest unsubscribe server</a>.
+         </li>
+         <li>
+          To receive announcements of new releases, send an empty message to the <a href= 
+          "mailto:jde-announce-subscribe@sunsite.dk">JDEE announce subscribe server</a>.
+         </li>
+         <li>
+          To stop receiving announcements, send an empty message to the <a href= 
+          "mailto:jde-announce-unsubscribe@sunsite.dk">JDEE announce unsubscribe server</a>.
+         </li>
+         <li>
+            For help on using the list, send mail to <a href= 
+            "mailto:jde-help@sunsite.dk">JDEE list help</a>.
+         </li>
+      </ul>
+      <p> 
+          A <a href="http://news.gmane.org/gmane.emacs.jdee">
+          searchable archive</a> exists for the JDEE mailing list that you can
+          as an information resource.
+      </p>
+      <p><strong>Note</strong> The domain name of the JDEE website changed as
+      of January 9, 2001, from <code>jde@sunsite.auc.dk</code> to
+      <code>jde@sunsite.dk</code>. This caused the creation of a new JDEE list
+      mail archive. Search the
+      <a href="http://www.mail-archive.com/jde@sunsite.auc.dk/maillist.html">
+      old archive</a> for messages earlier than about Jan. 10, 2001.
+      </p>
+      <p>
+        Sunsite Denmark hosts a JDEE newsgroup (sunsite.jde) to which you can
+        subscribe (point your news reader to the sunsite.dk
+        server). Messages to the mailing list and newsgroup are
+        cross-posted. The newsgroup contains all messages posted
+        since the mailing list's inception so if you are new to the
+        list it provides a means for you to catch up on previous
+        discussions.
+    </p>
+    <h2>
+       <a name="TechSupport"></a>Technical Support
+    </h2>
+    <p>
+       If you have a problem with the JDEE, first check the <a href= 
+      "trouble-shooting.htm">JDEE Troubleshooting Guide</a>. Next
+      make sure that you have installed the latest version of the
+      JDEE and the latest versions of the packages required by JDEE
+      on your system. Also, make sure that that system path and the
+      Emacs load-path variables list the paths to the required
+      packages. Most problems reported by users are
+      installation/setup problems.
+    </p>
+    <p>
+       Installing Emacs packages can be tricky, especially for
+      Emacs novices. If you are inexperienced, try finding a local
+      Emacs guru to help you. You may also be able to get help
+      installing supporting packages by sending messages to the <a
+      href="mailto:jde@sunsite.dk">JDEE mailing list</a> or
+      posting messages to the Emacs help newsgroup
+      (gnu.emacs.help).
+    </p>
+    <p>
+      If after you have installed the required packages, you still
+      have a problem running the JDEE, please send your problem
+      report (see <a href="rootpage.html#RequestingHelp">Requesting Help</a>),
+      preferably, to the <a href="mailto:jde@sunsite.dk">JDEE
+      mailing list</a> or, if you are not on the list, to <a href= 
+      "mailto:paulk@mathworks.com">Paul Kinnucan</a>.
+    </p>
+
+    <p><strong>Note</strong> I generally cc the JDEE list on my replies
+    to JDEE-related mail sent to me personally. I do this if I feel the
+    reply may be useful to other JDEE users in the hope that it will
+    save me from having to repeat the information later. The copied
+    reply generally include quotes from the original mail. If you
+    do not want me to cc the JDEE list, please include a note to this effect
+    at the head of your mail.    
+    </p>
+    
+    <h3>
+       <a name="RequestingHelp"></a>Requesting Help
+    </h3>
+    <p>
+       When requesting help, it is important that you provide a
+      complete, detailed description of the problem and the
+      Emacs/JDEE environment in which it occurs. That way, you will
+      avoid wasting precious time communicating potentially vital
+      information needed to help you. Also, please do not make the
+      mistake of assuming that you know what information is
+      necessary to solve a problem. If you knew, you would not be
+      asking for help, right? Nearly all the JDEE problems that I
+      have seen are caused by faulty setups. Because Emacs is an
+      open, extensible system, runs on many platforms, and allows
+      unlimited customization, no two Emacs/JDEE setups are alike.
+      Thus, when asking for help, it is particularly vital that you
+      supply a complete description of your Emacs/JDEE environment,
+      including:
+    </p>
+    <ul type="square">
+      <li>
+	<p>
+        host platform (e.g., Windows/NT, Solaris, Linux, etc.)
+	</p>
+      </li>
+      <li>
+	<p>
+        JDEE version (e.g., JDEE 2.0)
+	</p>
+      </li>
+      <li>
+	<p>
+        Emacs version (e.g., NT/Emacs 20.7.1)
+	</p>
+      </li>
+      <li>
+	<p>
+        <i>complete</i> contents of your <code>.emacs</code> file. 
+	</p>
+        <p>
+           <b>Note</b> Please do not make the common mistake of
+          sending only the so-called "JDEE-related" part of an
+          .emacs file. Settings in the omitted portion may conflict
+          in subtle ways with the JDEE portion. Many Emacs users,
+          especially novices, copy all or parts of their .emacs
+          files from other sources without taking pains to
+          understand the copied portions. When reporting a
+          JDEE problem, the owner typically omits the borrowed
+          sections as not "relevant" to the JDEE. Often, on the
+          contrary, it is precisely the omitted portion that is the
+          culprit.
+        </p>
+        <p>
+           By the way, <code>.emacs</code> files are highly personal things. The
+          easiest way for an Emacs newcomers to get into hot water
+          is to borrow some grizzled veteran's overgrown, crufty
+          .emacs file. An Emacs novice would do better to start
+          with a blank slate, adding to it gradually and
+          making sure to understand each addition completely, as it
+          is added.
+        </p>
+      </li>
+    </ul>
+    <ul type="square">
+      <li>
+	<p>
+        Contents of the backtrace buffer if an error occurs.
+	</p>
+	<p>If the the Lisp variable <code>debug-on-error</code>
+	is <code>t</code> when an error occurs,
+	 Emacs opens a buffer listing the 
+	sequence of Lisp function calls that led to the error.
+	This is known as a backtrace. A backtrace often is
+	enough to determine the cause of an error. You thus
+	should <i>always</i> include it if it occurs.</p>
+
+	<p> To get a backtrace, you
+           must set the Lisp variable <code>debug-on-error</code>
+	   to <code>t</code> <i>before</i>
+	   the error occurs. The best way to do this is to put the
+	   form  <code>(setq debug-on-error t)</code> in your 
+	   <code>.emacs</code> file and restart Emacs.
+	</p>
+
+      </li>
+      <li>
+	<p>
+          Contents of the <code>*messages*</code> buffer <i>immediately
+	  after</i> the error occurred.
+	</p>
+
+	<p><b>Note</b> The <code>*messages*</code> buffer is called
+           the "message log" on XEmacs. To display the message log,
+	   execute the command <code>show-message-log</code>.	
+	</p>
+      </li>
+
+      <li>
+	<p>
+        Contents of the <code>*JDEEbug*</code> buffer if you are having problems
+        with JDEEbug
+	</p>
+      </li>
+      <li>
+	<p>
+        Contents of the <code>prj.el</code> file for the project in which the
+        problem occurred.
+	</p>
+      </li>
+    </ul>
+    <p>
+       If the problem occurs during startup, rerun Emacs, using the
+      -debug-init command line switch. This causes Emacs to stop
+      when an error occurs in your .emacs file and display the
+      resulting backtrace in the backtrace buffer. Include the
+      backtrace in your problem report.</p>
+      <p>The JDEE includes a
+       <b>JDE->Help->Submit Problem Report</b> command that creates a complete 
+       snapshot of your system. If the error occurs after the JDEE is loaded,
+       you can use this command to generate all the information you need
+       to include in the problem report.      
+    </p>
+    
+    
+    <h2>
+       Year 2000 Compliance
+    </h2>
+    <p>
+       The JDEE itself does not have any date dependencies.
+      However, the JDEE requires other software packages that
+      may have date dependencies. The required packages include
+      Emacs, a Java compiler and debugger (e.g., those provided by
+      JavaSoft's Java Development Kit), and a web browser. See
+      Sun's <a href="http://www.sun.com/y2000/cpl.html">Product
+      Compliance Status</a> page for information on the JDK's Year
+      2000 compliance.
+    </p>
+    <h2>
+       <a name="AuthorBio"></a>About the Author
+    </h2>
+    <p>
+       <a name="AuthorBio"></a>Paul Kinnucan graduated from MIT in
+      1970. In the sixties and seventies, he developed numerical
+      and astronomical image processing software for mainframes at the
+      University of Chicago and MIT. In the 1980s, he wrote about
+      computers, factories, aircraft, and spacecraft for various
+      U.S. trade and general-circulation publications.  Recently, he
+      has divided his time between software development and technical
+      documentation. He is currently principal technical writer at The
+      MathWorks, Inc, a producer of engineering math and simulation
+      software. He is responsible for documenting the company's
+      simulation software and developing tools for displaying online
+      documentation for MathWorks products. He has a wife (Fran), son
+      (Michael, age 19), and daughter (Emma, 17). He lives with his
+      family in Milton, a suburb of Boston.
+    </p>
+    <p>
+       You are the&nbsp;<!-- BEGIN LE FASTCOUNTER CODE --><a href= 
+      "http://member.linkexchange.com/cgi-bin/fc/fastcounter-login?296194"
+      target="_top"><img src= 
+      "http://fastcounter.linkexchange.com/fastcounter?296194+592395"
+      border="0" alt="link counter"></a>&nbsp; 
+      <!-- END LE FASTCOUNTER CODE -->visitor since July 6,
+      1998.<br>
+    </p>
+    <p>
+       Counter courtesy of&nbsp; 
+      <!-- BEGIN LE FASTCOUNTER LINK --><a href= 
+      "http://www.fastcounter.com/fc-join" target="_top"><font
+      size="1" face="arial">LE FastCounter</font></a>.<br>
+       <!-- END LE FASTCOUNTER LINK --><br>
+       <!--
+                  <p>This page has been visited more than 9400 times since January 19, 1998.</p>
+
+
+                  <P>You are the&nbsp;<IMG SRC="/cgi-bin/nph-count?width=5&link=http://sunsite.dk/jde/index.html" >
+                  th visitor since June 16, 1998.
+                  -->
+    </p>
+    <p>&reg;Java is a registered trademark of Sun Microsystems, Inc.</p?
+  </body>
+</html>
