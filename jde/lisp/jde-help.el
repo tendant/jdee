@@ -28,7 +28,25 @@
 (require 'jde-util)
 
 ;; (makunbound 'jde-help-docsets)
-(defcustom jde-help-docsets (list (list "JDK API" "" nil))
+(defcustom jde-help-docsets
+  (list (list "JDK API"
+	      "http://java.sun.com/javase/6/docs/api"
+	      nil)
+	(list "User (javadoc)"
+	 "http://static.springsource.org/spring/docs/3.0.x/javadoc-api/"
+	 nil)
+	(list "User (javadoc)"
+	 "http://commons.apache.org/sandbox/functor/apidocs/"
+	 nil)
+	(list "User (javadoc)"
+	 "https://www.hibernate.org/hib_docs/v3/api"
+	 nil)
+	(list "User (javadoc)"
+	 "http://acegisecurity.org/acegi-security/apidocs"
+	 nil)
+	(list "User (javadoc)"
+	 "http://wicket.apache.org/docs/1.4"
+	 nil))
   "*Lists collections of HTML files documenting Java classes. 
 This list is used by the `jde-help-class' command to find help for 
 a class. You can specify the following information for each docset:
@@ -138,7 +156,7 @@ one of the the sites in `jde-help-docsets' is not always reachable."
 		 (const :tag "Disable timeout checking" :value 0)
                  (integer :tag "Timeout (seconds)" :value 900)))
 
-(defcustom jde-help-wget-command-line-options nil
+(defcustom jde-help-wget-command-line-options "--quiet"
   "Specifies additional options (beyond --spider, --tries and
 --timeout) to pass to wget, if wget is used for
 `jde-help-remote-file-exists-function'."
@@ -208,18 +226,15 @@ to verify the existence of pages located on remote systems."
 	    (error "Cannot find url-file-exists function"))
         (if (executable-find 
 	     (if (eq system-type 'windows-nt) "wget.exe" "wget"))
-            (if (not
-                 (string-match
-                  "200"
-                  (shell-command-to-string
-                   (concat "wget --spider "
+	    (let ((cmd (concat "wget --spider "
 			   (if jde-help-wget-tries
 			       (concat "--tries=" jde-help-wget-tries))
 			   (if jde-help-wget-timeout
 			       (concat "--timeout=" jde-help-wget-timeout))
 			   jde-help-wget-command-line-options
-			   " " url))))
-                (setq url nil))
+			       " " url)))
+	      (unless (= 0 (shell-command cmd))
+		(setq url nil)))
           (error
            (concat "Cannot find wget. This utility is needed "
                    "to access javadoc on remote systems.")))))

@@ -1,8 +1,11 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
 <project name="jdee" default="build">
-  <!-- ** properties start ** -->
+    <!-- add in the contribs (add ant-contrib-VERSION.jar) to CLASSPATH -->
+  <taskdef resource="net/sf/antcontrib/antlib.xml"/>
 
+
+  <!-- ** properties start ** -->
 
   <!-- configuration directory -->
   <property name="config.dir" location="./config"/>
@@ -100,7 +103,6 @@
     <property name="build.bin.emacs" value="emacs"/>
     <!-- end defaults -->
 
-
     <mkdir dir="${build.config.dir}"/>
 
     <!-- project specific defaults (not user or instance specific) -->
@@ -116,7 +118,6 @@
     </propertyfile>
   </target>
 
-
   <!-- configure (create/build) the emacs lisp build configuration files -->
   <target name="configure-ebuild" depends="configure,init"
 	  unless="lisp.uptodate">
@@ -125,12 +126,19 @@
       <fileset dir="${src.lisp.dir}" includes="*.el"/>
     </copy>
 
+    <!-- make windows paths "mixed" dos paths (cygwin term) -->
+    <mixed-path property="cedet.escaped.dir" value="${cedet.dir}"/>
+    <mixed-path property="elib.escaped.dir" value="${elib.dir}"/>
+    <mixed-path property="src.lisp.escaped.dir" value="${src.lisp.dir}"/>
+    <mixed-path property="build.lisp.escaped.dir" value="${build.lisp.dir}"/>
+
     <!-- create the file used to compile the emacs lisp code -->
     <copy file="${build.lisp.src.file}" tofile="${build.lisp.dst.file}"/>
     <replace file="${build.lisp.dst.file}">
-      <replacefilter token="@{cedet.dir}" value="${cedet.dir}"/>
-      <replacefilter token="@{src.lisp.dir}" value="${src.lisp.dir}"/>
-      <replacefilter token="@{build.lisp.dir}" value="${build.lisp.dir}"/>
+      <replacefilter token="@{cedet.dir}" value="${cedet.escaped.dir}"/>
+      <replacefilter token="@{elib.dir}" value="${elib.escaped.dir}"/>
+      <replacefilter token="@{src.lisp.dir}" value="${src.lisp.escaped.dir}"/>
+      <replacefilter token="@{build.lisp.dir}" value="${build.lisp.escaped.dir}"/>
       <replacefilter token="@{build.lisp.autoload.libname}" value="${build.lisp.autoload.libname}"/>
     </replace>
   </target>
@@ -138,11 +146,18 @@
 
   <target name="build-lisp" depends="configure-ebuild" unless="lisp.uptodate"
 	  description="compile the JDEE Emacs lisp code">
-    <!-- invoke Emacs in batch mode to creat autoloads and compile emacs
-         lisp -->
-    <exec dir="${build.lisp.dir}" executable="${build.bin.emacs}" failonerror="true">
-      <arg value="--script"/>
-      <arg value="${build.lisp.dst.file}"/>
+    <!-- invoke Emacs in batch mode to creat autoloads and compile emacs lisp
+         -->
+    <!-- here we set os=unix since otherwise the exec complains about the
+         directory not existing -->
+    <mixed-path property="build.lisp.escaped.dir" value="${build.lisp.dir}"/>
+    <mixed-path property="build.lisp.dst.escaped.file" value="${build.lisp.dst.file}"/>
+
+    <exec dir="${build.lisp.escaped.dir}"
+	  executable="${build.bin.emacs}" failonerror="true">
+      <arg value="--batch"/>
+      <arg value="--load"/>
+      <arg value="${build.lisp.dst.escaped.file}"/>
     </exec>
   </target>
 
@@ -217,5 +232,19 @@
 	  description="delete all derived objects">
     <delete file="${config.build.file}"/>
   </target>
+
+
+  <!-- macros -->
+
+  <!-- make windows paths "mixed" dos paths (cygwin term) -->
+  <macrodef name="mixed-path">
+      <attribute name="property"/>
+      <attribute name="value"/>
+      <sequential>
+	  <propertyregex property="@{property}" input="@{value}" regexp="\\"
+			 defaultValue="@{value}" replace="/" global="true"/>
+      </sequential>
+  </macrodef>
+
 
 </project>
