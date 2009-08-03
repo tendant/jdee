@@ -3606,7 +3606,7 @@ Returns t, if the template has been inserted, otherwise nil."
                 (save-excursion (re-search-backward "\\<.*\\="))))
            (abbrev
             (buffer-substring-no-properties abbrev-start (point)))
-           (template (assoc-ignore-case abbrev jde-gen-abbrev-templates)))
+           (template (assoc-string abbrev jde-gen-abbrev-templates t)))
       (if template
           (progn
             (delete-backward-char (length abbrev))
